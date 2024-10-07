@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PredictiveMaintenance\PredictiveMaintenance.csproj" />
+    <ProjectReference Include="..\PredictiveMaintenance\PredictiveMaintenance.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using Microsoft.ML;
 
-namespace PredictiveMaintenance
+namespace PredictiveMaintenance.Core
 {
     public partial class PredictiveMaintenanceModel
     {

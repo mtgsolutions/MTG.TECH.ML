@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PredictiveMaintenance;
-using static PredictiveMaintenance.PredictiveMaintenanceModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using PredictiveMaintenance.Api.Adapter;
+using PredictiveMaintenance.Core;
+using static PredictiveMaintenance.Core.PredictiveMaintenanceModel;
 
 namespace PredictiveMaintenance.Api.Controllers
 {
@@ -16,7 +16,8 @@ namespace PredictiveMaintenance.Api.Controllers
         public async Task<IActionResult> Predict([FromBody] ModelInput input)
         {
             var response = PredictiveMaintenanceModel.Predict(input);
-            return  Ok(response);
+            var machineInfo = ModelOutputAdapter.OutputAdapter(response, input);
+            return  Ok(machineInfo);
         }
     }
 }
