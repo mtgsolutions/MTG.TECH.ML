@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
-namespace PredictiveMaintenance.Core
+namespace PredictiveMaintenance_Core
 {
     public partial class PredictiveMaintenanceModel
     {

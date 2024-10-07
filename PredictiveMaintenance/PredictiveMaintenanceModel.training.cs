@@ -11,11 +11,11 @@ using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using Microsoft.ML;
 
-namespace PredictiveMaintenance.Core
+namespace PredictiveMaintenance_Core
 {
     public partial class PredictiveMaintenanceModel
     {
-        public const string RetrainFilePath =  @"C:\Users\milto\source\repos\MTG.TECH.ML\CpuML\ai4i2020.csv";
+        public const string RetrainFilePath =  @"C:\Users\milto\source\repos\MTG.TECH.ML\PredictiveMaintenance\ai4i2020.csv";
         public const char RetrainSeparatorChar = ',';
         public const bool RetrainHasHeader =  true;
         public const bool RetrainAllowQuoting =  false;
@@ -91,10 +91,9 @@ namespace PredictiveMaintenance.Core
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(@"Type", @"Type", outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
+            var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(new []{new InputOutputColumnPair(@"Product ID", @"Product ID"),new InputOutputColumnPair(@"Type", @"Type")}, outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
                                     .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"Air temperature", @"Air temperature"),new InputOutputColumnPair(@"Process temperature", @"Process temperature"),new InputOutputColumnPair(@"Rotational speed", @"Rotational speed"),new InputOutputColumnPair(@"Torque", @"Torque"),new InputOutputColumnPair(@"Tool wear", @"Tool wear")}))      
-                                    .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName:@"Product ID",outputColumnName:@"Product ID"))      
-                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"Type",@"Air temperature",@"Process temperature",@"Rotational speed",@"Torque",@"Tool wear",@"Product ID"}))      
+                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"Product ID",@"Type",@"Air temperature",@"Process temperature",@"Rotational speed",@"Torque",@"Tool wear"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"Machine failure",inputColumnName:@"Machine failure",addKeyValueAnnotationsAsText:false))      
                                     .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator:mlContext.BinaryClassification.Trainers.FastForest(new FastForestBinaryTrainer.Options(){NumberOfTrees=4,NumberOfLeaves=4,FeatureFraction=1F,LabelColumnName=@"Machine failure",FeatureColumnName=@"Features"}),labelColumnName:@"Machine failure"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
